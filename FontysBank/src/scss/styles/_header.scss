@@ -1,0 +1,38 @@
+// Header
+body {
+  background: #42345f;
+}
+
+header {
+  background: white;
+  box-shadow: 0 -6px 6px 6px #888;
+  color: #42345f;
+  height: 50px;
+  padding-top: 10px;
+  h4 {
+    color: #42345f;
+  }
+}
+
+.header {
+  &__logo {
+    cursor: default;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  &__logout {
+    text-align: end;
+    a {
+      text-decoration: none;
+      &:hover {
+        color: lighten(#42345f, 40%);
+      }
+      .button {
+        margin-top: -5px;
+        color: #42345f;
+        padding: 5px 10px;
+      }
+    }
+
+  }
+}

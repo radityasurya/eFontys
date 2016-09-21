@@ -1,0 +1,22 @@
+.login {
+  background: white;
+  height: 250px;
+  color: #42345f;
+
+  &__container {
+    padding: 10px;
+    padding-top: 20px;
+  }
+
+  h4 {
+    color: #43245F;
+    padding-bottom: 25px;
+  }
+
+  &__field {
+    margin-bottom: 10px;
+    &--button {
+      margin-top: 5px;
+    }
+  }
+}

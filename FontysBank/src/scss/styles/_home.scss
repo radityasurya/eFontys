@@ -1,0 +1,49 @@
+.box {
+  background: white;
+  color: black;
+  margin-bottom: 15px;
+  min-height: 200px;
+  padding: 10px 15px;
+
+  &__container--center {
+    margin-right: 80px;
+  }
+
+  &__title {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  &__data {
+    font-size: .875rem;
+    line-height: 1.125rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    code {
+      font-weight: 700;
+    }
+  }
+  &__input {
+    padding-bottom: 10px;
+  }
+
+  &--balance {
+    background: deeppink;
+    color: white;
+    h2 {
+      text-align: right;
+      color: white;
+      font-size: 3rem;
+      padding-top: 15px;
+      padding-bottom: 20px;
+    }
+    min-height: 80px;
+    padding-bottom: 0;
+  }
+}
+.money {
+    padding-top: 10px;
+    line-height: 1;
+    padding-bottom: 10px;
+    text-align: right;
+}
