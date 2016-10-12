@@ -1,1 +1,1 @@
-$(document).ready(function(){});
+$(document).ready(function(){$("a.close").click(function(e){e.preventDefault(),$(this).parent().fadeOut("slow")}),setTimeout(function(){$("a.close").parent().fadeOut("slow")},5e3)});

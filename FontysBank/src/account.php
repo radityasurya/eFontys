@@ -1,9 +1,13 @@
 <?php
     require_once("session.php");
     require_once("user.php");
-
+    //turn on php error reporting
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
     $auth_user = new User();
     $user_id = $_SESSION['user_session'];
+    $user_notif = $_SESSION['user_notif'];
+
     if(isset($_GET['id'])) {
       $selected_user_id = $_GET['id'];
     }
@@ -32,26 +36,100 @@
       if($user_role == 'Administrator') {
         try {
               if($auth_user->delete($_GET['delete_id'])) {
+                $user_notif->set("Success", "Account with id " . $_GET['delete_id'] . " is successfully deleted!");
                 $auth_user->redirect('index.php');
               }
             } catch (PDOException $e) {
-              echo $e->getMessage();
+              $user_notif->set("Error", $e->getMessage());
             }
       } else {
         $auth_user->redirect('index.php');
       }
     }
 
+    if(isset($_POST['account_button_back'])) {
+      $user_notif->clear();
+      $auth_user->redirect('index.php');
+    }
+
     if(isset($_POST['account_button'])) {
 
-      try {
+      $name     = $_FILES['file']['name'];
+      $tmpName  = $_FILES['file']['tmp_name'];
+      $size     = $_FILES['file']['size'];
+      $ext	  = strtolower(pathinfo($name, PATHINFO_EXTENSION));
 
-          if($auth_user->edit($selected_user_id, $_POST['account_name'], $_POST['account_email'], $_POST['account_phone'], $_POST['account_address'])) {
-            $auth_user->redirect('index.php');
+      if($size == 0) {
+        if(empty($_POST['account_name'])) {
+          $error = "Name is empty!";
+          } else if(empty($_POST['account_email'])) {
+            $error = "Email is empty!";
+          } else if(empty($_POST['account_phone'])) {
+            $error = "Phone is empty!";
+          } else if(empty($_POST['account_address'])) {
+            $error = "Address is empty!";
+          } else {
+            try {
+              if($auth_user->edit($selected_user_id, $_POST['account_name'], $_POST['account_email'], $_POST['account_phone'], $_POST['account_address'])) {
+                $user_notif->set("Success", "Your account is successfully updated!");
+                $auth_user->redirect('index.php');
+              }
+            } catch (PDOException $e) {
+              $user_notif->set("Error", $e->getMessage());
+            }
           }
-        } catch (PDOException $e) {
-          echo $e->getMessage();
+      } else {
+        // check file extension
+        if($ext != "jpg" && $ext != "png" && $ext != "jpeg" && $ext != "gif" ) {
+            $error = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+            $valid = false;
         }
+        else if ($size > 500000) {
+            $error = "Sorry, your file is too large!";
+            $valid = false;
+        } else {
+          $valid = true;
+        }
+
+        if ($valid) {
+          $targetPath =  dirname( __FILE__ ) . DIRECTORY_SEPARATOR. 'avatar' . DIRECTORY_SEPARATOR. $name;
+          if(move_uploaded_file($tmpName,$targetPath)) {
+              // add to database
+              try {
+                if($auth_user->updateAvatar($selected_user_id, $name)) {
+                }
+              } catch (PDOException $e) {
+                $user_notif->set("Error", $e->getMessage());
+              }
+          } else {
+            $error = "Sorry, there was an error uploading the avatar.";
+          }
+
+          if(empty($_POST['account_name'])) {
+          $error = "Name is empty!";
+          } else if(empty($_POST['account_email'])) {
+            $error = "Email is empty!";
+          } else if(empty($_POST['account_phone'])) {
+            $error = "Phone is empty!";
+          } else if(empty($_POST['account_address'])) {
+            $error = "Address is empty!";
+          } else {
+            try {
+              if($auth_user->edit($selected_user_id, $_POST['account_name'], $_POST['account_email'], $_POST['account_phone'], $_POST['account_address'])) {
+                $user_notif->set("Success", "Your account is successfully updated!");
+                $auth_user->redirect('index.php');
+              }
+            } catch (PDOException $e) {
+              $user_notif->set("Error", $e->getMessage());
+            }
+          }
+        }
+
+      }
+
+
+
+
     }
 
 ?>
@@ -84,29 +162,40 @@
     <div class="container">
       <div class="row clear pad-top-30 pad-bottom-5">
         <div class="center col-12 col-6-m col-6-l">
-          <div class="box">
-            <div class="box__title pad-bottom-10">Edit Account Details</div>
-            <div class="box__container pad-top-10 pad-bottom-25">
-              <form class="pad-bottom-20" method="post">
-                <div class="field-group clear row">
-                  <div class="col-12"> <code>Name</code>
-                    <input name="account_name" type="text" class="field login__field" placeholder="Name" value='<?php print($userRow["name"]) ?>' /> </div>
-                </div>
-                <div class="field-group clear row">
-                  <div class="col-12"> <code>Email</code>
-                    <input name="account_email" type="email" class="field login__field" placeholder="email@email.com" value='<?php print($userRow["email"]) ?>' /> </div>
-                </div>
-                <div class="field-group clear row">
-                  <div class="col-12"> <code>Phone</code>
-                    <input name="account_phone" type="text" class="field login__field" placeholder="0612345678" value='<?php print($userRow["phone"]) ?>' /> </div>
-                </div>
-                <div class="field-group clear row pad-bottom-10">
-                  <div class="col-12"> <code>Address</code>
-                    <input name="account_address" type="text" class="field login__field" placeholder="St. Local 12" value='<?php print($userRow["address"]) ?>' /> </div>
-                </div>
-                <button name="account_button" type="submit" class="button right">Save</button> <a href="index.php" class="button right" style="margin-right: 5px">Back</a> </form>
+          <?php if(isset($error)) { ?>
+            <div class="box box--notification box--notification-error" style="margin-bottom:0; padding-bottom: 10px"> <span class="center"> <?php echo $error; ?></span>
+              <a href="#" class="right close"></a>
             </div>
-          </div>
+            <?php } ?>
+              <div class="box">
+                <div class="box__title pad-bottom-10">Edit Account Details</div>
+                <div class="box__container pad-top-10 pad-bottom-25">
+                  <form class="pad-bottom-20" method="post" enctype="multipart/form-data">
+                    <div class="field-group clear row">
+                      <div class="col-12"> <code>Avatar</code>
+                        <input type="file" class="field login__field" name="file" /> </div>
+                    </div>
+                    <div class="field-group clear row">
+                      <div class="col-12"> <code>Name</code>
+                        <input name="account_name" type="text" class="field login__field" placeholder="Name" value='<?php print($userRow["name"]) ?>' /> </div>
+                    </div>
+                    <div class="field-group clear row">
+                      <div class="col-12"> <code>Email</code>
+                        <input name="account_email" type="email" class="field login__field" placeholder="email@email.com" value='<?php print($userRow["email"]) ?>' /> </div>
+                    </div>
+                    <div class="field-group clear row">
+                      <div class="col-12"> <code>Phone</code>
+                        <input name="account_phone" type="text" class="field login__field" placeholder="0612345678" value='<?php print($userRow["phone"]) ?>' /> </div>
+                    </div>
+                    <div class="field-group clear row pad-bottom-10">
+                      <div class="col-12"> <code>Address</code>
+                        <input name="account_address" type="text" class="field login__field" placeholder="St. Local 12" value='<?php print($userRow["address"]) ?>' /> </div>
+                    </div>
+                    <button name="account_button" type="submit" class="button right">Save</button>
+                    <button name="account_button_back" type="submit" class="button right" style="margin-right: 5px">Back</button>
+                  </form>
+                </div>
+              </div>
         </div>
       </div>
       <script src="js/vendor/jquery.min.js"></script>

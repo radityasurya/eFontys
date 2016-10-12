@@ -1,0 +1,4 @@
+SQLi
+XSS prevention
+CSRF token
+Shell Upload prevention

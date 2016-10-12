@@ -4,11 +4,9 @@
   margin-bottom: 15px;
   min-height: 200px;
   padding: 10px 15px;
-
   &__container--center {
     margin-right: 80px;
   }
-
   &__title {
     font-size: 16px;
     font-weight: bold;
@@ -26,7 +24,6 @@
   &__input {
     padding-bottom: 10px;
   }
-
   &--balance {
     background: deeppink;
     color: white;
@@ -40,10 +37,58 @@
     min-height: 80px;
     padding-bottom: 0;
   }
+  &--notification {
+    cursor: default;
+    background: white;
+    color: white;
+    h2 {
+      text-align: right;
+      color: white;
+      font-size: 3rem;
+      padding-top: 15px;
+      padding-bottom: 20px;
+    }
+    &-success {
+      background: #5ABF69;
+      color: white;
+      &:hover {
+        background: lighten(#5ABF69, 2.5%);
+      }
+    }
+    &-error {
+      background: #EA5050;
+      color: white;
+      &:hover {
+        background: lighten(#EA5050, 2.5%);
+      }
+    }
+    min-height: 40px;
+    padding-bottom: 0;
+  }
 }
 .money {
-    padding-top: 10px;
-    line-height: 1;
-    padding-bottom: 10px;
-    text-align: right;
+  padding-top: 10px;
+  line-height: 1;
+  padding-bottom: 10px;
+  text-align: right;
+}
+.close {
+  margin-top: 2px;
+  width: 15px;
+  height: 20px;
+  background-image: url('../img/close.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.avatar {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  -webkit-border-radius: 100%;
+  -webkit-background-clip: padding-box;
+  -moz-border-radius: 100;
+  -moz-background-clip: padding;
+  border-radius: 100;
+  background-size: cover;
+  background-position: center center;
 }

@@ -1521,12 +1521,54 @@ header {
       font-size: 3rem;
       padding-top: 15px;
       padding-bottom: 20px; }
+  .box--notification {
+    cursor: default;
+    background: white;
+    color: white;
+    min-height: 40px;
+    padding-bottom: 0; }
+    .box--notification h2 {
+      text-align: right;
+      color: white;
+      font-size: 3rem;
+      padding-top: 15px;
+      padding-bottom: 20px; }
+    .box--notification-success {
+      background: #5ABF69;
+      color: white; }
+      .box--notification-success:hover {
+        background: #63c371; }
+    .box--notification-error {
+      background: #EA5050;
+      color: white; }
+      .box--notification-error:hover {
+        background: #eb5b5b; }
 
 .money {
   padding-top: 10px;
   line-height: 1;
   padding-bottom: 10px;
   text-align: right; }
+
+.close {
+  margin-top: 2px;
+  width: 15px;
+  height: 20px;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAJcEhZcwAADdcAAA3XAUIom3gAAAAHdElNRQfgCgYSNzFrMCFPAAABJUlEQVRo3s2ZyxGDMAxENWmAcqjdHVBOOthcyJBJDPgj6YUbHHYfDLZXkpmZaVHRaomXVhUt75tFm6RnHoJWPSVtWg575SHs9toRVHRcCQgf9pJUvh8EI1Td8hBOnXIQLl3iEW4dYhGa1OMQmpVjELpU/RG6FX0RhtT8EIaVfBCmVOYRphXmBFy+4biI2180JuS6jvrF3HeSPsGQvbRdNOw0aRMOPU/vxcMTxbVBSqY6N0lLlXWj1Fz9a5Yb62sIufYVhGz7U4TE4raGMGz/SKQOfP8/+AOwNZC9DOGNCN6K4cMIPo7hQAJHMjiUwrEcLkzg0gwuTuHyHG5QwC0auEkFt+ngRiXcqoWb1XC7Hh5YwCMbeGiFj+34wSU9usWH12bs+P4FnsFinmwBRiwAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTYtMTAtMDZUMTg6NTU6NDkrMDI6MDDV14FSAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE2LTEwLTA2VDE4OjU1OjQ5KzAyOjAwpIo57gAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAASUVORK5CYII=");
+  background-size: contain;
+  background-repeat: no-repeat; }
+
+.avatar {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  -webkit-border-radius: 100%;
+  -webkit-background-clip: padding-box;
+  -moz-border-radius: 100;
+  -moz-background-clip: padding;
+  border-radius: 100;
+  background-size: cover;
+  background-position: center center; }
 
 .no-margin {
   margin: 0; }
