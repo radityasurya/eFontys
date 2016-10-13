@@ -8,7 +8,7 @@ $login = new User();
 $ip = $_SERVER['REMOTE_ADDR'];
 
 $stmt = $login->runQuery("SELECT * FROM protection WHERE ip = :ip");
-$stmt->execute(array(":ip"=>$ip));
+$stmt->execute(array(":ip" => $ip));
 
 $checkIP = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -17,26 +17,27 @@ function checker($login) {
   $ip = $_SERVER['REMOTE_ADDR'];
 
   $stmt = $login->runQuery("SELECT * FROM protection WHERE ip = :ip");
-  $stmt->execute(array(":ip"=>$ip));
+  $stmt->execute(array(":ip" => $ip));
 
   $checkIP = $stmt->fetch(PDO::FETCH_ASSOC);
+  $time = time();
 
   if(empty($checkIP)) {
-    $stmt = $login->runQuery("INSERT INTO protection(ip, time)
-                               VALUES(:ip, :time)");
+    $stmt = $login->runQuery("INSERT INTO protection(ip, last_login)
+                               VALUES(:ip, :last_login)");
     $stmt->bindparam(":ip", $ip);
-    $stmt->bindparam(":time", time());
+    $stmt->bindparam(":last_login", $time);
 
     $stmt->execute();
 
     $stmt = $login->runQuery("SELECT * FROM protection WHERE ip = :ip");
-    $stmt->execute(array(":ip"=>$ip));
+    $stmt->execute(array(":ip" => $ip));
 
     $checkIP = $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
   if($checkIP['failed_login'] >= 3) {
-      if((time() - $checkIP['time']) > 30) {
+      if(($time - $checkIP['last_login']) > 30) {
         $stmt = $login->runQuery("UPDATE protection SET failed_login = 0 WHERE ip = :ip");
         $stmt->bindparam(":ip", $ip);
         $stmt->execute();
@@ -73,16 +74,16 @@ if(isset($_POST['login_button'])) {
           $stmt->execute();
           $login->redirect('home.php');
         } else {
-          $time = time();
           if($checkIP['failed_login'] >= 3) {
             $stmt = $login->runQuery("UPDATE protection SET failed_login = failed_login + 1 WHERE ip = :ip");
             $stmt->bindparam(":ip", $ip);
             $stmt->execute();
             $error = "Sorry, Login disabled for 30 seconds!";
           } else {
-            $stmt = $login->runQuery("UPDATE protection SET failed_login = failed_login + 1, time = :time WHERE ip = :ip");
+            $time = time();
+            $stmt = $login->runQuery("UPDATE protection SET failed_login = failed_login + 1, last_login = :last_login WHERE ip = :ip");
             $stmt->bindparam(":ip", $ip);
-            $stmt->bindparam(":time", time());
+            $stmt->bindparam(":last_login", $time);
             $stmt->execute();
             $error = "Login Failed - Wrong Credentials";
           }

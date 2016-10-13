@@ -155,11 +155,12 @@ class User
 			{
 				if(password_verify($upass, $userRow['password']))
 				{
+					$time = time();
 					$_SESSION['user_session'] = $userRow['id'];
 					$_SESSION['user_role_session'] = $userRow['role'];
 					$notif = new Notification();
 					$_SESSION['user_notif'] = $notif;
-					$_SESSION['start'] = time();
+					$_SESSION['start'] = $time;
 					$_SESSION['expire'] = $_SESSION['start'] + (30 * 60);
 					if (empty($_SESSION['token'])) {
 						if (function_exists('mcrypt_create_iv')) {

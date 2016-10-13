@@ -2,8 +2,10 @@
 class Database
 {
     private $host = "localhost";
-    private $db_name = "radityas_efontys";
-    private $username = "radityas_efontys";
+    //private $db_name = "radityas_efontys";
+    //private $username = "radityas_efontys";
+    private $db_name = "sepr_bank";
+    private $username = "root";
     private $password = "redranger";
     public $conn;
 
