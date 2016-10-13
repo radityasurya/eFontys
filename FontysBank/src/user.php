@@ -258,5 +258,14 @@ class User
 		return !empty($userResult);
 	}
 
+	public function getUserById($id) {
+		$stmt = $this->runQuery("SELECT * FROM user WHERE id = :uid");
+		$stmt->execute(array(":uid" => $id));
+
+		$userResult = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		return $userResult;
+	}
+
 }
 ?>

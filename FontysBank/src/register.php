@@ -42,6 +42,8 @@
         $error = "Email is empty!";
       } else if(empty($phone)) {
         $error = "Phone is empty!";
+      } else if(!is_numeric($phone)) {
+        $error = "Phone is not number!";
       } else if(empty($address)) {
         $error = "Address is empty!";
       } else if($auth_user->isUserExist($uname)) {

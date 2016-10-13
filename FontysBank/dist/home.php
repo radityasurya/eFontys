@@ -141,7 +141,7 @@
     <header>
       <div class="container">
         <div class="row clear pad-top-5 pad-bottom-5">
-          <div class="col-5 col-4-m col-2-l header__logo"> <a href="#">Fontys Bank</a> </div>
+          <div class="col-5 col-4-m col-2-l header__logo">Fontys Bank</div>
           <div class="col-7 col-6-m col-4-l right header__logout"> <i>Hi, <?php print($userRow['username']) ?></i>
             <a href="logout.php?logout=true">
               <button class="button button--logout">Logout</button>
@@ -227,7 +227,7 @@
                   </div>
                 </li>
               </ul>
-              <a href='account.php?id=<?php print($user_id) ?>' class="button right">Edit</a>
+              <a href='account.php?action=edit' class="button right">Edit</a>
             </div>
           </div>
         </div>
@@ -300,9 +300,9 @@
                             <td>
                               <?php echo $value['role'] ?>
                             </td>
-                            <td class="center"> <a href='account.php?id=<?php print($value['id']) ?>'>Edit</a>
+                            <td class="center"> <a href='account.php?action=edit&id=<?php print($value['id']) ?>'>Edit</a>
                               <?php if($value['role'] != 'Administrator') { ?>
-                                <a href='account.php?delete_id=<?php print($value['id']) ?>'>Remove</a>
+                                <a href='account.php?action=delete&id=<?php print($value['id']) ?>'>Remove</a>
                                 <?php } ?>
                             </td>
                           </tr>
@@ -323,7 +323,7 @@
                       <div class="row clear padding-bottom-15">
                         <form method="post">
                           <div class="col-12 box__input"> <span class="col-4 money">€</span>
-                            <input type="number" class="col-8" id="textDeposit" placeholder="Amount" name="deposit_amount">
+                            <input type="number" class="col-8" id="textDeposit" placeholder="Amount" name="deposit_amount" min="1" max="99999">
                             <input type="hidden" name="token" value="<?php echo $token; ?>" />
                             </div>
                           <div class="col-12 right">
@@ -343,7 +343,7 @@
                           <div class="col-12 box__input"> <span class="col-4 money">To</span>
                             <input name="transfer_recipient" type="text" class="col-8" id="textDeposit" placeholder="Recipient"> </div>
                           <div class="col-12 box__input"> <span class="col-4 money">€</span>
-                            <input name="transfer_amount" type="number" class="col-8" id="textDeposit" placeholder="Amount">
+                            <input name="transfer_amount" type="number" class="col-8" id="textDeposit" placeholder="Amount" min="1" max="99999">
                             <input type="hidden" name="token" value="<?php echo $token; ?>" /></div>
                           <div class="col-12 right">
                             <button name="transfer_button" type="submit" class="button col-8 right">Transfer</button>

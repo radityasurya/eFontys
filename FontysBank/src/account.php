@@ -7,18 +7,62 @@
     $auth_user = new User();
     $user_id = $_SESSION['user_session'];
     $user_notif = $_SESSION['user_notif'];
-
-    if(isset($_GET['id'])) {
-      $selected_user_id = $_GET['id'];
-    }
     $user_role = $_SESSION['user_role_session'];
 
     $stmt = $auth_user->runQuery("SELECT user.id, user.role, user.username, account.name, account.balance, account.address, account.phone, account.email FROM account, user WHERE account.id = user.id AND user.id = :user_id GROUP BY account.id");
 
-    if($user_role == "Administrator" ) {
-      $stmt->execute(array(":user_id"=>$selected_user_id));
+    if($_GET['action'] == 'edit') {
+      //$stmt->execute(array(":user_id"=>$user_id));
+      
+      if (isset($_GET['id'])) {
+        if($user_role == "Administrator" ) {
+          $selected_user_id = $_GET['id'];
+          $tempUser = $auth_user->getUserById($selected_user_id);
+          if(!empty($tempUser)) { 
+            $stmt->execute(array(":user_id"=>$selected_user_id));
+          } else {
+            $user_notif->set("Error", "Account with the id " . $_GET['delete_id'] . " is not found!");
+            $auth_user->redirect('index.php');
+          }
+        } else {
+          $user_notif->set("Error", "Admin access only!");
+          $auth_user->redirect('index.php');
+        }
+                
+      } else {
+        $stmt->execute(array(":user_id"=>$user_id));
+      }
+    } else if ($_GET['action'] == 'delete') {
+      if (isset($_GET['id'])) {
+        if($user_role == "Administrator" ) {
+          $selected_user_id = $_GET['id'];
+          $tempUser = $auth_user->getUserById($selected_user_id);
+          if(!empty($tempUser) && $tempUser['role'] != 'Administrator') { 
+            try {              
+              if($auth_user->delete($selected_user_id)) {
+                  $user_notif->set("Success", "Account with id " . $selected_user_id . " is successfully deleted!");
+                  $auth_user->redirect('index.php');
+              } else {
+                $user_notif->set("Error", "Account with id " . $_GET['delete_id'] . " is not found!");
+                $auth_user->redirect('index.php');
+              }
+            } catch (PDOException $e) {
+              $user_notif->set("Error", $e->getMessage());
+            }
+          } else {
+              $user_notif->set("Error", "Administrator account cannot be deleted!");
+              $auth_user->redirect('index.php');
+          }
+        } else {
+          $user_notif->set("Error", "Admin access only!");
+          $auth_user->redirect('index.php');
+        }
+      } else {
+        $auth_user->redirect('index.php');
+      }
+
     } else {
-      $stmt->execute(array(":user_id"=>$user_id));
+      $auth_user->redirect('index.php');
     }
 
     $userRow = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -29,21 +73,6 @@
     if($getUser->execute()) {
       while ($row = $getUser->fetch(PDO::FETCH_ASSOC)) {
         $memberList[] = $row;
-      }
-    }
-
-    if(isset($_GET['delete_id'])) {
-      if($user_role == 'Administrator') {
-        try {
-              if($auth_user->delete($_GET['delete_id'])) {
-                $user_notif->set("Success", "Account with id " . $_GET['delete_id'] . " is successfully deleted!");
-                $auth_user->redirect('index.php');
-              }
-            } catch (PDOException $e) {
-              $user_notif->set("Error", $e->getMessage());
-            }
-      } else {
-        $auth_user->redirect('index.php');
       }
     }
 
@@ -126,9 +155,6 @@
         }
 
       }
-
-
-
 
     }
 
