@@ -341,7 +341,7 @@
                       <div class="row clear padding-bottom-15">
                         <form method="post">
                           <div class="col-12 box__input"> <span class="col-4 money">To</span>
-                            <input name="transfer_recipient" type="text" class="col-8" id="textDeposit" placeholder="Recipient"> </div>
+                            <input name="transfer_recipient" type="text" class="col-8" id="textDeposit" placeholder="Recipient Username"> </div>
                           <div class="col-12 box__input"> <span class="col-4 money">€</span>
                             <input name="transfer_amount" type="number" class="col-8" id="textDeposit" placeholder="Amount" min="1" max="99999">
                             <input type="hidden" name="token" value="<?php echo $token; ?>" /></div>

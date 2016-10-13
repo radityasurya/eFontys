@@ -12,7 +12,6 @@
     $stmt = $auth_user->runQuery("SELECT user.id, user.role, user.username, account.name, account.balance, account.address, account.phone, account.email FROM account, user WHERE account.id = user.id AND user.id = :user_id GROUP BY account.id");
 
     if($_GET['action'] == 'edit') {
-      //$stmt->execute(array(":user_id"=>$user_id));
       
       if (isset($_GET['id'])) {
         if($user_role == "Administrator" ) {
@@ -87,6 +86,17 @@
       $tmpName  = $_FILES['file']['tmp_name'];
       $size     = $_FILES['file']['size'];
       $ext	  = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+
+      if (isset($_GET['id'])) {
+        if($user_role == "Administrator" ) { 
+          $selected_user_id = $_GET['id'];
+        } else {
+          $user_notif->set("Error", "Admin access only!");
+          $auth_user->redirect('index.php');
+        }
+      } else {
+        $selected_user_id = $user_id;
+      }
 
       if($size == 0) {
         if(empty($_POST['account_name'])) {
