@@ -75,7 +75,9 @@ class User
 
 		// check if recipient exist
 		if ($this->isUserExist($recipient)) {
-
+			$id = mysql_real_escape_string($id);
+			$recipient = mysql_real_escape_string($recipient);
+			$money = mysql_real_escape_string($money);
 			try {
 				// withdraw current balance
 				$stmt = $this->conn->prepare("UPDATE account SET balance = balance - :money WHERE account.id = :user_id AND balance > 0");
